@@ -11,6 +11,9 @@ body {
   padding: 20px;
   font-family: 'Poppins', sans-serif;
   background: #ffffff;
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .header {
@@ -22,8 +25,9 @@ body {
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3,1fr);
   gap: 14px;
+  padding-bottom: 60px; /* space for bottom disclaimer */
 }
 
 .card {
@@ -70,12 +74,20 @@ body {
   }
 }
 
+/* Bottom center disclaimer */
 .disclaimer {
-  margin-top: 18px;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 11px;
   color: #777;
-  line-height: 1.4;
   text-align: center;
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  z-index: 999;
 }
 </style>
 </head>
