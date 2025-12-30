@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 14px;
+  background: linear-gradient(180deg,#f6f7f9,#ffffff);
+}
+
+/* Floating chips */
+.chips {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 999px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.chip.active {
+  background: #000;
+  color: #fff;
+}
+
+.chip span {
+  font-size: 18px;
+}
+
+/* Map container */
+.map-shell {
+  margin-top: 14px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 18px 30px rgba(0,0,0,0.12);
+}
+
+iframe {
+  width: 100%;
+  height: 360px;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Floating category chips -->
+<div class="chips">
+  <div class="chip active" onclick="selectPlace(this,'mosques')">
+    <span>🕌</span> Mosques
+  </div>
+  <div class="chip" onclick="selectPlace(this,'restrooms')">
+    <span>🚻</span> Restrooms
+  </div>
+  <div class="chip" onclick="selectPlace(this,'ATM')">
+    <span>🏧</span> ATM
+  </div>
+  <div class="chip" onclick="selectPlace(this,'restaurants')">
+    <span>🍽️</span> Restaurants
+  </div>
+</div>
+
+<!-- Map -->
+<div class="map-shell">
+  <iframe id="mapFrame"></iframe>
+</div>
+
+<script>
+let userLat = 0;
+let userLng = 0;
+
+navigator.geolocation.getCurrentPosition(
+  pos => {
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
+    loadMap('mosques');
+  },
+  () => loadMap('mosques')
+);
+
+function selectPlace(el, place) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  loadMap(place);
+}
+
+function loadMap(place) {
+  let url =
+    "https://www.google.com/maps?q=" + encodeURIComponent(place) +
+    "&center=" + userLat + "," + userLng +
+    "&zoom=15&output=embed";
+  document.getElementById("mapFrame").src = url;
+}
+</script>
+
+</body>
+</html>
