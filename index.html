@@ -22,22 +22,20 @@ body{
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:14px;
 }
 
 .card{
+  position:relative;
+  overflow:hidden;
   background:#ffffff;
   padding:22px 8px;
   border-radius:22px;
   text-align:center;
   box-shadow:0 10px 26px rgba(0,0,0,0.08);
   cursor:pointer;
-  transition:all .2s ease;
-}
-
-.card:active{
-  transform:scale(.96);
+  user-select:none;
 }
 
 .icon{
@@ -49,6 +47,23 @@ body{
   font-weight:600;
   margin-top:8px;
 }
+
+/* RIPPLE */
+.ripple{
+  position:absolute;
+  border-radius:50%;
+  transform:scale(0);
+  background:rgba(0,0,0,0.12);
+  animation:ripple 600ms linear;
+  pointer-events:none;
+}
+
+@keyframes ripple{
+  to{
+    transform:scale(4);
+    opacity:0;
+  }
+}
 </style>
 </head>
 
@@ -57,51 +72,55 @@ body{
 <div class="header">Nearby Accesses</div>
 
 <div class="cards">
-  <div class="card" onclick="openMap('mosque')">
+  <div class="card" onclick="openMaps(event,'mosques near me')">
     <div class="icon">🕌</div>
     <div class="title">Mosque</div>
   </div>
 
-  <div class="card" onclick="openMap('restroom')">
+  <div class="card" onclick="openMaps(event,'public restrooms near me')">
     <div class="icon">🚻</div>
     <div class="title">Restroom</div>
   </div>
 
-  <div class="card" onclick="openMap('atm')">
+  <div class="card" onclick="openMaps(event,'ATMs near me')">
     <div class="icon">🏧</div>
     <div class="title">ATM</div>
   </div>
 
-  <div class="card" onclick="openMap('restaurant')">
+  <div class="card" onclick="openMaps(event,'restaurants near me')">
     <div class="icon">🍽️</div>
     <div class="title">Restaurants</div>
   </div>
 
-  <div class="card" onclick="openMap('tourist attractions')">
+  <div class="card" onclick="openMaps(event,'tourist attractions near me')">
     <div class="icon">📍</div>
     <div class="title">Tourist Spots</div>
   </div>
 </div>
 
 <script>
-function openMap(type){
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(
-      pos=>{
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        window.location.href =
-         `https://www.google.com/maps/search/${encodeURIComponent(type)}/@${lat},${lng},15z`;
-      },
-      ()=>{
-        window.location.href =
-         `https://www.google.com/maps/search/${encodeURIComponent(type)}`;
-      }
-    );
-  }else{
+function openMaps(event, query){
+  // Ripple
+  const card = event.currentTarget;
+  const circle = document.createElement("span");
+  const diameter = Math.max(card.clientWidth, card.clientHeight);
+  const radius = diameter / 2;
+
+  circle.style.width = circle.style.height = `${diameter}px`;
+  circle.style.left = `${event.clientX - card.getBoundingClientRect().left - radius}px`;
+  circle.style.top = `${event.clientY - card.getBoundingClientRect().top - radius}px`;
+  circle.classList.add("ripple");
+
+  const ripple = card.getElementsByClassName("ripple")[0];
+  if (ripple) ripple.remove();
+  card.appendChild(circle);
+
+  // Open Google Maps (universal deep link)
+  setTimeout(()=>{
     window.location.href =
-     `https://www.google.com/maps/search/${encodeURIComponent(type)}`;
-  }
+      "https://www.google.com/maps/search/?api=1&query=" +
+      encodeURIComponent(query);
+  },150);
 }
 </script>
 
