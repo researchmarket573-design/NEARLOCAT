@@ -6,63 +6,76 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-body{
-  margin:0;
-  padding:20px;
-  font-family:'Poppins',sans-serif;
-  background:#ffffff;
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: #ffffff;
 }
 
-.header{
-  font-size:17px;
-  font-weight:600;
-  margin-bottom:18px;
-  color:#111;
+.header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #111;
 }
 
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
-.card{
-  position:relative;
-  overflow:hidden;
-  background:#ffffff;
-  padding:22px 8px;
-  border-radius:22px;
-  text-align:center;
-  box-shadow:0 10px 26px rgba(0,0,0,0.08);
-  cursor:pointer;
-  user-select:none;
+.card {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 22px 8px;
+  border-radius: 22px;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease;
 }
 
-.icon{
-  font-size:28px;
+.card:active {
+  transform: scale(0.96);
 }
 
-.title{
-  font-size:13px;
-  font-weight:600;
-  margin-top:8px;
+.icon {
+  font-size: 28px;
 }
 
-/* RIPPLE */
-.ripple{
-  position:absolute;
-  border-radius:50%;
-  transform:scale(0);
-  background:rgba(0,0,0,0.12);
-  animation:ripple 600ms linear;
-  pointer-events:none;
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
 }
 
-@keyframes ripple{
-  to{
-    transform:scale(4);
-    opacity:0;
+/* Ripple Effect */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  background: rgba(0,0,0,0.12);
+  animation: ripple 600ms linear;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
+}
+
+.disclaimer {
+  margin-top: 18px;
+  font-size: 11px;
+  color: #777;
+  line-height: 1.4;
+  text-align: center;
 }
 </style>
 </head>
@@ -98,9 +111,13 @@ body{
   </div>
 </div>
 
+<div class="disclaimer">
+  Nearby results are provided via Google Maps and are not affiliated with HYZR.
+</div>
+
 <script>
 function openMaps(event, query){
-  // Ripple
+  // Ripple effect
   const card = event.currentTarget;
   const circle = document.createElement("span");
   const diameter = Math.max(card.clientWidth, card.clientHeight);
@@ -115,11 +132,10 @@ function openMaps(event, query){
   if (ripple) ripple.remove();
   card.appendChild(circle);
 
-  // Open Google Maps (universal deep link)
+  // Open Google Maps Universal Deep Link
   setTimeout(()=>{
-    window.location.href =
-      "https://www.google.com/maps/search/?api=1&query=" +
-      encodeURIComponent(query);
+    window.location.href = 
+      "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
   },150);
 }
 </script>
